@@ -1,7 +1,11 @@
 package com.symphony.ms.songwriter.command;
 
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.beginsAndEndsWith;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.whiteSpace;
+
 import com.symphony.ms.songwriter.internal.command.CommandHandler;
 import com.symphony.ms.songwriter.internal.command.model.BotCommand;
+import com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder;
 import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -9,25 +13,29 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 /**
- * Sample code for a CommandHandler that generates instructions on how to
- * receive notifications from external systems.
- *
+ * Sample code for a CommandHandler that generates instructions on how to receive notifications from
+ * external systems.
  */
 public class CreateNotificationCommandHandler extends CommandHandler {
 
   private static final String NOTIFICATION_PATH = "/notification";
 
-  @Value( "${server.servlet.context-path}" )
+  @Value("${server.servlet.context-path}")
   private String servletContext;
 
   @Override
   protected Predicate<String> getCommandMatcher() {
-    return Pattern
-        .compile("^@"+ getBotName() + " /create notification$")
-        .asPredicate();
+    return beginsAndEndsWith(
+        new CommandMatcherBuilder()
+            .followedBy("@")
+            .followedBy(getBotName())
+            .followedBy(whiteSpace())
+            .followedBy("/create")
+            .followedBy(whiteSpace())
+            .followedBy("notification"))
+        .predicate();
   }
 
   /**

@@ -1,5 +1,16 @@
 package com.symphony.ms.songwriter.command;
 
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CharacterMatcher.any;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CharacterMatcher.characterSet;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CharacterMatcher.negatedSet;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.beginsWith;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.group;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.nonCapturingGroup;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.oneOrMore;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.optional;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.character;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.whiteSpace;
+
 import com.symphony.ms.songwriter.internal.command.CommandHandler;
 import com.symphony.ms.songwriter.internal.command.model.BotCommand;
 import com.symphony.ms.songwriter.internal.lib.jsonmapper.JsonMapper;
@@ -85,10 +96,48 @@ public class TemplateCommandHandler extends CommandHandler {
 
   private Pattern getTemplateCommandPattern() {
     if (templateCommandPattern == null) {
-      templateCommandPattern = Pattern.compile(
-          "^@" + getBotName() + "\\s/template(?:\\s+(?:([^\\s]+)(?:\\s+([\\s\\S]+)?)?)?)?");
+      templateCommandPattern = buildTemplateCommandPattern();
     }
     return templateCommandPattern;
+  }
+
+  private Pattern buildTemplateCommandPattern() {
+    characterSet(character('a'));
+    return beginsWith("@")
+        .followedBy(getBotName())
+        .followedBy(whiteSpace())
+        .followedBy("/template")
+        .followedBy(
+            optional(
+                nonCapturingGroup(
+                    oneOrMore(whiteSpace()
+                    ).followedBy(
+                        optional(
+                            nonCapturingGroup(
+                                group(
+                                    oneOrMore(
+                                        negatedSet(whiteSpace())
+                                    )
+                                ).followedBy(
+                                    optional(
+                                        nonCapturingGroup(
+                                            oneOrMore(whiteSpace()
+                                            ).followedBy(
+                                                optional(
+                                                    group(
+                                                        oneOrMore(any())
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ).pattern();
   }
 
 }

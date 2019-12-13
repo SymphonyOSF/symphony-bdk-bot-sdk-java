@@ -1,5 +1,8 @@
 package com.symphony.ms.songwriter.command;
 
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.beginsWith;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.whiteSpace;
+
 import com.symphony.ms.songwriter.command.model.InternalQuote;
 import com.symphony.ms.songwriter.command.model.QuoteResponse;
 import com.symphony.ms.songwriter.internal.command.CommandHandler;
@@ -10,7 +13,6 @@ import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
 
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 /**
  * Sample code. CommandHandler that uses {@link RestClient} to consume external API to get currency
@@ -31,9 +33,11 @@ public class QuoteCommandHandler extends CommandHandler {
 
   @Override
   protected Predicate<String> getCommandMatcher() {
-    return Pattern
-        .compile("^@" + getBotName() + " " + QUOTE_COMMAND)
-        .asPredicate();
+    return beginsWith("@")
+        .followedBy(getBotName())
+        .followedBy(whiteSpace())
+        .followedBy(QUOTE_COMMAND)
+        .predicate();
   }
 
   /**

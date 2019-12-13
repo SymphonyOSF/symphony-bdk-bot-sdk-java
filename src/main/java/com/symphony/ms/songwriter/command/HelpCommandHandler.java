@@ -1,24 +1,23 @@
 package com.symphony.ms.songwriter.command;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.simpleCommandMatcher;
+
 import com.symphony.ms.songwriter.internal.command.CommandHandler;
 import com.symphony.ms.songwriter.internal.command.model.BotCommand;
 import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
+
 /**
  * Sample code. Help command to return the list of available commands
- *
  */
 public class HelpCommandHandler extends CommandHandler {
 
   @Override
   protected Predicate<String> getCommandMatcher() {
-    return Pattern
-        .compile("^@"+ getBotName() + " /help$")
-        .asPredicate();
+    return simpleCommandMatcher(getBotName(), "help").predicate();
   }
 
   /**

@@ -1,23 +1,21 @@
 package com.symphony.ms.songwriter.command;
 
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
+import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.beginsWith;
+
 import com.symphony.ms.songwriter.internal.command.DefaultCommandHandler;
 import com.symphony.ms.songwriter.internal.command.model.BotCommand;
 import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
 
+import java.util.function.Predicate;
+
 /**
- * Sample code for DefaultCommandHandler. Returns a simple static message when
- * bot is mentioned.
- *
+ * Sample code for DefaultCommandHandler. Returns a simple static message when bot is mentioned.
  */
 public class DefaultBotMentionHandler extends DefaultCommandHandler {
 
   @Override
   protected Predicate<String> getCommandMatcher() {
-    return Pattern
-        .compile("^@" + getBotName())
-        .asPredicate();
+    return beginsWith("@").followedBy(getBotName()).predicate();
   }
 
   /**
