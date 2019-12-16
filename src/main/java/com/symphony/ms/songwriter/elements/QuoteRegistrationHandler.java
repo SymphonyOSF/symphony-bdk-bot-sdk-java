@@ -1,12 +1,12 @@
 package com.symphony.ms.songwriter.elements;
 
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.beginsAndEndsWith;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.whiteSpace;
+import static com.symphony.ms.songwriter.internal.command.matcher.CommandMatcherBuilder.beginsAndEndsWith;
+import static com.symphony.ms.songwriter.internal.command.matcher.EscapedCharacter.whiteSpace;
 
+import com.symphony.ms.songwriter.internal.command.matcher.CommandMatcherBuilder;
 import com.symphony.ms.songwriter.internal.command.model.BotCommand;
 import com.symphony.ms.songwriter.internal.elements.ElementsHandler;
 import com.symphony.ms.songwriter.internal.event.model.SymphonyElementsEvent;
-import com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder;
 import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
 
 import java.util.HashMap;

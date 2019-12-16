@@ -1,7 +1,5 @@
 package com.symphony.ms.songwriter.command;
 
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.simpleCommandMatcher;
-
 import com.symphony.ms.songwriter.internal.command.AuthenticatedCommandHandler;
 import com.symphony.ms.songwriter.internal.command.config.CommandAuthenticationProvider;
 import com.symphony.ms.songwriter.internal.command.model.AuthenticationContext;
@@ -9,6 +7,7 @@ import com.symphony.ms.songwriter.internal.command.model.BotCommand;
 import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
 
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * Sample code to demonstrate how to use {@link AuthenticatedCommandHandler} along with an
@@ -19,7 +18,9 @@ public class LoginCommandHandler extends AuthenticatedCommandHandler {
 
   @Override
   protected Predicate<String> getCommandMatcher() {
-    return simpleCommandMatcher(getBotName(), "login").predicate();
+    return Pattern
+        .compile("^@" + getBotName() + " /login$")
+        .asPredicate();
   }
 
   /**

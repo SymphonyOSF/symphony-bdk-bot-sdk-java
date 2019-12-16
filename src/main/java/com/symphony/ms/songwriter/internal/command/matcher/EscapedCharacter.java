@@ -1,4 +1,4 @@
-package com.symphony.ms.songwriter.internal.lib.commandmatcher;
+package com.symphony.ms.songwriter.internal.command.matcher;
 
 /**
  * Matcher for escaped characters. It can be used to match with reserved, special, and unicode

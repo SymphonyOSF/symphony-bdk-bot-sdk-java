@@ -1,15 +1,15 @@
 package com.symphony.ms.songwriter.command;
 
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CharacterMatcher.any;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CharacterMatcher.characterSet;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CharacterMatcher.negatedSet;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.beginsWith;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.group;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.nonCapturingGroup;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.oneOrMore;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.optional;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.character;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.whiteSpace;
+import static com.symphony.ms.songwriter.internal.command.matcher.CharacterMatcher.any;
+import static com.symphony.ms.songwriter.internal.command.matcher.CharacterMatcher.characterSet;
+import static com.symphony.ms.songwriter.internal.command.matcher.CharacterMatcher.negatedSet;
+import static com.symphony.ms.songwriter.internal.command.matcher.CommandMatcherBuilder.beginsWith;
+import static com.symphony.ms.songwriter.internal.command.matcher.CommandMatcherBuilder.group;
+import static com.symphony.ms.songwriter.internal.command.matcher.CommandMatcherBuilder.nonCapturingGroup;
+import static com.symphony.ms.songwriter.internal.command.matcher.CommandMatcherBuilder.oneOrMore;
+import static com.symphony.ms.songwriter.internal.command.matcher.CommandMatcherBuilder.optional;
+import static com.symphony.ms.songwriter.internal.command.matcher.EscapedCharacter.character;
+import static com.symphony.ms.songwriter.internal.command.matcher.EscapedCharacter.whiteSpace;
 
 import com.symphony.ms.songwriter.internal.command.CommandHandler;
 import com.symphony.ms.songwriter.internal.command.model.BotCommand;

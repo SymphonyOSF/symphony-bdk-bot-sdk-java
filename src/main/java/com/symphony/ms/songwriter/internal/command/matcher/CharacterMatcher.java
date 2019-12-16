@@ -1,4 +1,4 @@
-package com.symphony.ms.songwriter.internal.lib.commandmatcher;
+package com.symphony.ms.songwriter.internal.command.matcher;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public class CharacterMatcher implements Regex {
       throw new IllegalArgumentException("Character set must have at least one element");
     }
     return new CharacterMatcher(
-        "[" + Arrays.stream(chars).map(EscapedCharacter::regex).collect(Collectors.joining(","))
+        "[" + Arrays.stream(chars).map(EscapedCharacter::regex).collect(Collectors.joining(""))
             + "]");
   }
 
@@ -48,7 +48,7 @@ public class CharacterMatcher implements Regex {
       throw new IllegalArgumentException("Character set must have at least one element");
     }
     return new CharacterMatcher(
-        "[^" + Arrays.stream(chars).map(EscapedCharacter::regex).collect(Collectors.joining(","))
+        "[^" + Arrays.stream(chars).map(EscapedCharacter::regex).collect(Collectors.joining(""))
             + "]");
   }
 

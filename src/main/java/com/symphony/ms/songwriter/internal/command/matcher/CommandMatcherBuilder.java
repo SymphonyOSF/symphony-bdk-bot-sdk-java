@@ -1,10 +1,8 @@
-package com.symphony.ms.songwriter.internal.lib.commandmatcher;
-
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.whiteSpace;
+package com.symphony.ms.songwriter.internal.command.matcher;
 
 import com.symphony.ms.songwriter.internal.command.CommandFilter;
 
-import org.apache.commons.lang.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -112,7 +110,7 @@ public class CommandMatcherBuilder implements Regex {
    * @return the command matcher builder with the ending pattern applied to the regex.
    */
   public static CommandMatcherBuilder endsWith(String regex) {
-    return new CommandMatcherBuilder("$" + regex);
+    return new CommandMatcherBuilder(regex + "$");
   }
 
   /**
@@ -419,23 +417,6 @@ public class CommandMatcherBuilder implements Regex {
     return new CommandMatcherBuilder("(" +
         String.join("|", Arrays.stream(regex).map(Regex::regex).collect(Collectors.toList()))
         + ")");
-  }
-
-  /**
-   * Instantiates a command matcher builder with the simple-command-matcher applied.
-   *
-   * @param botName the name of the bot.
-   * @param command the command name.
-   * @return the command matcher builder with the simple-command-matcher applied.
-   */
-  public static CommandMatcherBuilder simpleCommandMatcher(String botName, String command) {
-    return beginsAndEndsWith(
-        new CommandMatcherBuilder()
-            .followedBy("@")
-            .followedBy(botName)
-            .followedBy(whiteSpace())
-            .followedBy("/")
-            .followedBy(command));
   }
 
 }

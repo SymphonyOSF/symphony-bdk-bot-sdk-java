@@ -1,7 +1,5 @@
 package com.symphony.ms.songwriter.command;
 
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.simpleCommandMatcher;
-
 import com.symphony.ms.songwriter.internal.command.CommandHandler;
 import com.symphony.ms.songwriter.internal.command.model.BotCommand;
 import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
@@ -9,6 +7,7 @@ import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * Sample code. Simple hello message.
@@ -17,7 +16,9 @@ public class HelloCommandHandler extends CommandHandler {
 
   @Override
   protected Predicate<String> getCommandMatcher() {
-    return simpleCommandMatcher(getBotName(), "hello").predicate();
+    return Pattern
+        .compile("^@" + getBotName() + " /hello$")
+        .asPredicate();
   }
 
   /**

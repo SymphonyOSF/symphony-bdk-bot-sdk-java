@@ -1,4 +1,4 @@
-package com.symphony.ms.songwriter.internal.lib.commandmatcher;
+package com.symphony.ms.songwriter.internal.command.matcher;
 
 /**
  * Represents a regular expression.

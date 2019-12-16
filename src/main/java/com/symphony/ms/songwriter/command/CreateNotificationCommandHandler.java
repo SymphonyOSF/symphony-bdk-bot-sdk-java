@@ -1,11 +1,7 @@
 package com.symphony.ms.songwriter.command;
 
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder.beginsAndEndsWith;
-import static com.symphony.ms.songwriter.internal.lib.commandmatcher.EscapedCharacter.whiteSpace;
-
 import com.symphony.ms.songwriter.internal.command.CommandHandler;
 import com.symphony.ms.songwriter.internal.command.model.BotCommand;
-import com.symphony.ms.songwriter.internal.lib.commandmatcher.CommandMatcherBuilder;
 import com.symphony.ms.songwriter.internal.message.model.SymphonyMessage;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * Sample code for a CommandHandler that generates instructions on how to receive notifications from
@@ -27,15 +24,9 @@ public class CreateNotificationCommandHandler extends CommandHandler {
 
   @Override
   protected Predicate<String> getCommandMatcher() {
-    return beginsAndEndsWith(
-        new CommandMatcherBuilder()
-            .followedBy("@")
-            .followedBy(getBotName())
-            .followedBy(whiteSpace())
-            .followedBy("/create")
-            .followedBy(whiteSpace())
-            .followedBy("notification"))
-        .predicate();
+    return Pattern
+        .compile("^@" + getBotName() + " /create notification$")
+        .asPredicate();
   }
 
   /**
