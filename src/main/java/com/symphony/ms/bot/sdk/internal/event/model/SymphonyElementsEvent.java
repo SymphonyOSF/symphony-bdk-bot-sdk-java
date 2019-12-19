@@ -23,7 +23,7 @@ public class SymphonyElementsEvent extends BaseEvent {
 
   public SymphonyElementsEvent(User initiator, SymphonyElementsAction action) {
     this.streamId = action.getStreamId();
-    this.streamType = StreamDetails.StreamType.valueOf(action.getStreamType().toUpperCase());
+    this.streamType = StreamDetails.StreamType.value(action.getStreamType());
     this.formId = action.getFormId();
     this.formValues = action.getFormValues();
     this.user = new UserDetails(initiator);

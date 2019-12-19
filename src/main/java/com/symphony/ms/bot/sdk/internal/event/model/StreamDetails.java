@@ -24,17 +24,29 @@ public class StreamDetails {
   private Boolean crossPod;
 
   public StreamDetails(Stream stream) {
-    this.streamType = StreamType.valueOf(stream.getStreamType().toUpperCase());
+    this.streamType = StreamType.value(stream.getStreamType().toUpperCase());
     this.roomName = stream.getRoomName();
     this.members = stream.getMembers() == null ? Collections.emptyList()
         : stream.getMembers().stream().map(UserDetails::new).collect(Collectors.toList());
     this.external = stream.getExternal();
     this.crossPod = stream.getCrossPod();
-
   }
 
   public enum StreamType {
-    ROOM, IM, MIM
+    ROOM, IM, MIM, UNKNOWN;
+
+    public static StreamType value(String name) {
+      switch (name.toUpperCase()) {
+        case "ROOM":
+          return ROOM;
+        case "IM":
+          return IM;
+        case "MIM":
+          return MIM;
+        default:
+          return UNKNOWN;
+      }
+    }
   }
 
 }
