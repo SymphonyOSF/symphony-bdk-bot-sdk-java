@@ -73,17 +73,17 @@ POD. Fill out the following properties to make the application to point to your 
 |--------------------------------|-------------------------------------------|
 | sessionAuthHost                | The session authorization host URL        |
 | sessionAuthPort                | The session authorization host port       |
-| keyAuthHost                    | The session authorization host URL        |
-| keyAuthPort                    | The session authorization host port       |
+| keyAuthHost                    | The key manager authorization host URL    |
+| keyAuthPort                    | The key manager authorization host port   |
 | podHost                        | The Pod host URL                          |
 | podPort                        | The Pod host port                         |
 | agentHost                      | The Agent host URL                        |
 | agentPort                      | The Agent host port                       |
 | appId                          | The extension app identification          |
 | appPrivateKeyPath              | The extension app private key path        |
-| appPrivateKeyName              | The extension app private key certificate |
+| appPrivateKeyName              | The extension app private key file        |
 | botPrivateKeyPath              | The bot private key path                  |
-| botPrivateKeyName              | The bot private key certificate           |
+| botPrivateKeyName              | The bot private key file                  |
 | botUsername                    | The bot username                          |
 | authTokenRefreshPeriod         | The authentication token refresh period   |
 | authenticationFilterUrlPattern | The authentication filter URL pattern     |
@@ -624,6 +624,26 @@ Currently Symphony Bot application is shipped with Freemarker template engine an
 ### Using Symphony standardized templates
 
 The template file methods of ```SymphonyMessage``` (```setTemplateFile``` and ```setEnrichedTemplateFile```) can also be used to render predefined templates. For that, it is necessary to specify a native template wildcards from Symphony standardized templates.
+
+Example:
+
+```java
+public class TemplateSampleHandler extends CommandHandler {
+
+  @Override
+  protected Predicate<String> getCommandMatcher() {
+    ...
+  }
+
+  @Override
+  public void handle(BotCommand command, SymphonyMessage commandResponse) {
+    Map<String, Object> commandParameter =
+        jsonMapper.toObject("{\"message\": {\"title\": \"Title\", \"content\": \"Content\"}}", Map.class);
+    commandResponse.setTemplateFile(SmsRenderer.SmsTypes.ALERT.getName(), commandParameter);
+  }
+
+}
+```
 
 Currently, Symphony supports the following templates:
 
