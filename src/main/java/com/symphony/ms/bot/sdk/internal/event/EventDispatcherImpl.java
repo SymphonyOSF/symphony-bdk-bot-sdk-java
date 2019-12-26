@@ -24,14 +24,7 @@ public class EventDispatcherImpl implements EventDispatcher {
   @Override
   public <E extends BaseEvent> void register(String channel, BaseEventHandler<E> handler) {
     LOGGER.info("Registering handler for event: {}", channel);
-    List<BaseEventHandler> handlers = eventHandlers.get(channel);
-    if (handlers == null || handlers.isEmpty()) {
-      handlers = new ArrayList<>();
-      handlers.add(handler);
-      eventHandlers.put(channel, handlers);
-    } else {
-      handlers.add(handler);
-    }
+    eventHandlers.computeIfAbsent(channel, handlers -> new ArrayList<>()).add(handler);
   }
 
   /**
@@ -41,13 +34,13 @@ public class EventDispatcherImpl implements EventDispatcher {
   @Async("botTaskExecutor")
   public <E extends BaseEvent> void push(String channel, E event) {
     LOGGER.debug("Looking for handler for event: {}", channel);
-    List<BaseEventHandler> handlers = eventHandlers.get(channel);
-    if (handlers != null && !handlers.isEmpty()) {
-      for (BaseEventHandler<E> handler : handlers) {
+    eventHandlers.computeIfPresent(channel, (ch, handlers) -> {
+      handlers.forEach(handler -> {
         LOGGER.debug("Handler found");
         handler.onEvent(event);
-      }
-    }
+      });
+      return handlers;
+    });
   }
 
 }

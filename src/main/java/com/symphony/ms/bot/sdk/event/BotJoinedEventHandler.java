@@ -3,8 +3,7 @@ package com.symphony.ms.bot.sdk.event;
 import com.symphony.ms.bot.sdk.internal.event.EventHandler;
 import com.symphony.ms.bot.sdk.internal.event.model.UserJoinedRoomEvent;
 import com.symphony.ms.bot.sdk.internal.message.model.SymphonyMessage;
-
-import configuration.SymConfig;
+import com.symphony.ms.bot.sdk.internal.symphony.SymphonyService;
 
 /**
  * Sample code. Implementation of {@link EventHandler} to check if the user joining the room is the
@@ -12,17 +11,18 @@ import configuration.SymConfig;
  */
 public class BotJoinedEventHandler extends EventHandler<UserJoinedRoomEvent> {
 
-  private final String botUsername;
+  private final String botDisplayName;
 
-  public BotJoinedEventHandler(SymConfig symConfig) {
-    this.botUsername = symConfig.getBotUsername();
+  public BotJoinedEventHandler(SymphonyService symphonyService) {
+    this.botDisplayName = symphonyService.getBotDisplayName();
   }
 
   @Override
   public void handle(UserJoinedRoomEvent event, SymphonyMessage eventResponse) {
-    if (event.getUser().getUsername().equals(botUsername)) {
-      eventResponse.setMessage("<mention uid=\"" + event.getUserId() +
-          "\"/> was added. Symphony Bot Application features are now available in this room.");
+    if (event.getUser().getDisplayName().equals(botDisplayName)) {
+      eventResponse.setMessage("<mention uid=\"" + event.getUserId()
+          + "\"/> was added to the room. For details on how to use it, please type: @"
+          + botDisplayName + " /help");
     }
   }
 }
