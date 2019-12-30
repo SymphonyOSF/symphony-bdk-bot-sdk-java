@@ -495,6 +495,33 @@ public class UserJoinedEventHandler extends EventHandler<UserJoinedRoomEvent> {
 * **RoomMemberPromotedToOwnerEvent**: fired when a room member is promoted to room owner
 
 
+### Permission for the bot application bot in public rooms 
+
+Symphony Bot Application comes with an EventHandler implementation of UserJoinedRoomEvent event by default, called BotJoinedEventHandler.
+
+This handler reacts to the event of user joining the room. It removes the added user if it is the bot application user and the room is public.
+
+To turn this feature on, it is necessary to add a configuration in application-feature.yaml like the example above:
+
+ ```yaml
+features:
+  isPublicRoomAllowed: false
+  publicRoomNotAllowedMessage: Sorry, I cannot be added to public rooms
+  publicRoomNotAllowedTemplate: alert
+  publicRoomNotAllowedTemplateMap:
+    message:
+      title: Bot not allowed in public rooms
+      content: Sorry, I cannot be added to public rooms
+```
+
+|                 Property                 |                                               Description                                               |
+|------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| features.isPublicRoomAllowed             | Enablement for allowing to have the application bot in public rooms                                     |
+| features.publicRoomNotAllowedMessage     | The message to be displayed after removing the application bot from a public room                       |
+| features.publicRoomNotAllowedTemplate    | The template from the message displayed after removing the application bot from a public room           |
+| features.publicRoomNotAllowedTemplateMap | The template parameter from the message displayed after removing the application bot from a public room |
+
+
 ## Working with Symphony Elements
 
 Symphony Elements allow bots to send messages containing interactive forms with text fields, dropdown menus, person selectors, buttons and more.

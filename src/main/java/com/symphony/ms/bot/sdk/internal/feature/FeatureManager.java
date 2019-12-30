@@ -1,11 +1,13 @@
 package com.symphony.ms.bot.sdk.internal.feature;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 /**
  * Loads feature flags and details from properties file to control/customize
@@ -27,10 +29,14 @@ public class FeatureManager {
   private String transactionIdOnError;
   private String eventUnexpectedErrorMessage;
   private String notificationBaseUrl;
+  private boolean isPublicRoomAllowed;
+  private String publicRoomNotAllowedMessage;
+  private String publicRoomNotAllowedTemplate;
+  private Map publicRoomNotAllowedTemplateMap;
 
   /**
-   * Whether bot is allowed to send a response in Symphony chat upon completing
-   * handling a command or event.
+   * Whether bot is allowed to send a response in Symphony chat upon completing handling a command
+   * or event.
    *
    * @return true if bot is allowed to send responses, false otherwise
    */
