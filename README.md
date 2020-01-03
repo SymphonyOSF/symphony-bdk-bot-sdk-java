@@ -495,32 +495,40 @@ public class UserJoinedEventHandler extends EventHandler<UserJoinedRoomEvent> {
 * **RoomMemberPromotedToOwnerEvent**: fired when a room member is promoted to room owner
 
 
-### Permission for the bot application bot in public rooms 
+### Permission for bots in public rooms 
 
-Symphony Bot Application comes with an EventHandler implementation of UserJoinedRoomEvent event by default, called BotJoinedEventHandler.
+Symphony Bot Application offers an easy way to control whether your bots are allowed to be added to public rooms or not.
 
-This handler reacts to the event of user joining the room. It removes the added user if it is the bot application user and the room is public.
+By default, bots built with the Symphony Bot Application are able to join public rooms. To change that behavior, the developer just need to set the ```isPublicRoomAllowed``` in application-feature.yaml file.
 
-To turn this feature on, it is necessary to add a configuration in application-feature.yaml like the example above:
+It is also possible to configure a custom message the bot would send before quitting the room, through the following configurations:
+
+| Property                                 | Description                                                                  |
+|------------------------------------------|------------------------------------------------------------------------------|
+| features.isPublicRoomAllowed             | Enablement to allow having bot in public rooms                               |
+| features.publicRoomNotAllowedMessage     | The message displayed after the bot removal                                  |
+| features.publicRoomNotAllowedTemplate    | The file name of the template of the message displayed after the bot removal |
+| features.publicRoomNotAllowedTemplateMap | The template parameters of the message displayed after the bot removal       |
+
+The developer can set a message to be displayed before the bot removal, by setting  ```publicRoomNotAllowedMessage```, like the example below:
 
  ```yaml
 features:
   isPublicRoomAllowed: false
   publicRoomNotAllowedMessage: Sorry, I cannot be added to public rooms
+```
+
+or, can use templates to generate structured messages, by setting ```publicRoomNotAllowedTemplate``` and ```publicRoomNotAllowedTemplateMap```, like the following example:
+
+ ```yaml
+features:
+  isPublicRoomAllowed: false
   publicRoomNotAllowedTemplate: alert
   publicRoomNotAllowedTemplateMap:
     message:
       title: Bot not allowed in public rooms
       content: Sorry, I cannot be added to public rooms
 ```
-
-|                 Property                 |                                               Description                                               |
-|------------------------------------------|---------------------------------------------------------------------------------------------------------|
-| features.isPublicRoomAllowed             | Enablement for allowing to have the application bot in public rooms                                     |
-| features.publicRoomNotAllowedMessage     | The message to be displayed after removing the application bot from a public room                       |
-| features.publicRoomNotAllowedTemplate    | The template from the message displayed after removing the application bot from a public room           |
-| features.publicRoomNotAllowedTemplateMap | The template parameter from the message displayed after removing the application bot from a public room |
-
 
 ## Working with Symphony Elements
 

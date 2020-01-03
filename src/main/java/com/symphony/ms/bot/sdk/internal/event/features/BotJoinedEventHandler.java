@@ -6,8 +6,6 @@ import com.symphony.ms.bot.sdk.internal.feature.FeatureManager;
 import com.symphony.ms.bot.sdk.internal.message.MessageService;
 import com.symphony.ms.bot.sdk.internal.message.model.SymphonyMessage;
 import com.symphony.ms.bot.sdk.internal.symphony.SymphonyService;
-
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +33,6 @@ public class BotJoinedEventHandler extends EventHandler<UserJoinedRoomEvent> {
       if (isPublicRoomNotAllowed() && isPublicRoom(event)) {
         sendPublicRoomNotAllowedMessage(event.getStreamId());
         removeBotFromRoom(event);
-      } else {
-        eventResponse.setMessage("<mention uid=\"" + event.getUserId()
-            + "\"/> was added to the room. For details on how to use it, please type: @"
-            + symphonyService.getBotDisplayName() + " /help");
       }
     }
   }
@@ -57,17 +51,29 @@ public class BotJoinedEventHandler extends EventHandler<UserJoinedRoomEvent> {
 
   private void sendPublicRoomNotAllowedMessage(String streamId) {
     SymphonyMessage symphonyMessage = new SymphonyMessage();
-    if (StringUtils.isBlank(featureManager.getPublicRoomNotAllowedTemplate())) {
+    if (isPublicRoomNotAllowedTemplateDefined()) {
+      symphonyMessage.setTemplateFile(featureManager.getPublicRoomNotAllowedTemplate(),
+              featureManager.getPublicRoomNotAllowedTemplateMap());
+      messageService.sendMessage(streamId, symphonyMessage);
+    } else if (isPublicRoomNotAllowedMessageDefined()) {
       symphonyMessage.setMessage(featureManager.getPublicRoomNotAllowedMessage());
+      messageService.sendMessage(streamId, symphonyMessage);
     }
-    symphonyMessage.setTemplateFile(featureManager.getPublicRoomNotAllowedTemplate(),
-        featureManager.getPublicRoomNotAllowedTemplateMap());
-    messageService.sendMessage(streamId, symphonyMessage);
+  }
+
+  private boolean isPublicRoomNotAllowedTemplateDefined() {
+    return featureManager.getPublicRoomNotAllowedTemplate() != null &&
+            !featureManager.getPublicRoomNotAllowedTemplate().isEmpty();
+  }
+
+  private boolean isPublicRoomNotAllowedMessageDefined() {
+    return featureManager.getPublicRoomNotAllowedMessage() != null &&
+            !featureManager.getPublicRoomNotAllowedMessage().isEmpty();
   }
 
   private void removeBotFromRoom(UserJoinedRoomEvent event) {
     LOGGER.debug("Removing bot from room (streamId={}). Bot in public room not allowed.",
-        event.getStreamId());
+            event.getStreamId());
     symphonyService.removeMemberFromRoom(event.getStreamId(), new Long(event.getUserId()));
   }
 
