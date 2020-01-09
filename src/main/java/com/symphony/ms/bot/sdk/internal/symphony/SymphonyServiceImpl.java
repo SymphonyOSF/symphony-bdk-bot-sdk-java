@@ -234,10 +234,14 @@ public class SymphonyServiceImpl implements SymphonyService {
   @Override
   public List<SymphonyStream> getUserStreams(List<StreamType> streamTypes,
       boolean includeInactiveStreams) {
-    return symBotClient.getStreamsClient().getUserStreams(
-        streamTypes.stream().map(StreamType::toString).collect(Collectors.toList()),
-        includeInactiveStreams)
-        .stream().map(SymphonyStream::new).collect(Collectors.toList());
+    List<String> streamTypeNames = streamTypes != null ? streamTypes
+        .stream()
+        .map(StreamType::toString)
+        .collect(Collectors.toList()) : null;
+    return symBotClient.getStreamsClient().getUserStreams(streamTypeNames, includeInactiveStreams)
+        .stream()
+        .map(SymphonyStream::new)
+        .collect(Collectors.toList());
 
   }
 
@@ -301,7 +305,7 @@ public class SymphonyServiceImpl implements SymphonyService {
     room.setMembersCanInvite(symphonyRoom.getMembersCanInvite());
     room.setMultiLateralRoom(symphonyRoom.getMultiLateralRoom());
     room.setName(symphonyRoom.getName());
-    room.setPublic(symphonyRoom.getIsPublic());
+    room.setPublic(symphonyRoom.getPublicRoom());
     room.setReadOnly(symphonyRoom.getReadOnly());
     return room;
   }
@@ -313,7 +317,7 @@ public class SymphonyServiceImpl implements SymphonyService {
     roomSearchQuery.setLabels(symphonyRoomSearchQuery.getLabels());
     roomSearchQuery.setMember(symphonyRoomSearchQuery.getMember());
     roomSearchQuery.setOwner(symphonyRoomSearchQuery.getOwner());
-    roomSearchQuery.setPrivate(symphonyRoomSearchQuery.getIsPrivate());
+    roomSearchQuery.setPrivate(symphonyRoomSearchQuery.getPrivateRoom());
     return roomSearchQuery;
   }
 

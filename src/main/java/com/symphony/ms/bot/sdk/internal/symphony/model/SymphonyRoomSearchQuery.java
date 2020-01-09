@@ -2,7 +2,6 @@ package com.symphony.ms.bot.sdk.internal.symphony.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,8 +27,7 @@ public class SymphonyRoomSearchQuery {
   private String query;
   private List<String> labels;
   private Boolean active;
-  @JsonProperty("private")
-  private Boolean isPrivate;
+  private Boolean privateRoom;
   private NumericId creator;
   private NumericId owner;
   private NumericId member;
@@ -40,11 +38,12 @@ public class SymphonyRoomSearchQuery {
     this.active = roomSearchQuery.getActive();
     this.labels = roomSearchQuery.getLabels();
     this.creator = roomSearchQuery.getCreator();
-    this.isPrivate = roomSearchQuery.getPrivate();
+    this.privateRoom = roomSearchQuery.getPrivate();
     this.member = roomSearchQuery.getMember();
     this.owner = roomSearchQuery.getOwner();
     this.query = roomSearchQuery.getQuery();
     this.skip = skip;
     this.limit = limit;
   }
+
 }

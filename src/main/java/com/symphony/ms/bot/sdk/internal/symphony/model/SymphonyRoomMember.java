@@ -15,12 +15,12 @@ import model.RoomMember;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SymphonyRoomMember {
 
-  private Long id;
+  private Long userId;
   private Boolean owner;
   private Long joinDate;
 
   public SymphonyRoomMember(RoomMember roomMember) {
-    this.id = roomMember.getId();
+    this.userId = roomMember.getId();
     this.owner = roomMember.getOwner();
     this.joinDate = roomMember.getJoinDate();
   }

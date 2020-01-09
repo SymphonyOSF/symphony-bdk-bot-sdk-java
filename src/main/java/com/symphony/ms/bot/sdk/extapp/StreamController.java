@@ -1,6 +1,5 @@
 package com.symphony.ms.bot.sdk.extapp;
 
-import com.symphony.ms.bot.sdk.internal.symphony.StreamType;
 import com.symphony.ms.bot.sdk.internal.symphony.SymphonyService;
 import com.symphony.ms.bot.sdk.internal.symphony.model.SymphonyStream;
 
@@ -13,10 +12,10 @@ import java.util.List;
 /**
  * Sample code. Implementation of an extension app endpoint for streams
  *
- * @author Gabriel Berberia
+ * @author Gabriel Berberian
  */
 @RestController
-@RequestMapping("/appauth/stream")
+@RequestMapping("/secure/stream")
 public class StreamController {
 
   private final SymphonyService symphonyService;
@@ -25,9 +24,14 @@ public class StreamController {
     this.symphonyService = symphonyService;
   }
 
+  /**
+   * Gets streams of all types from the application bot
+   *
+   * @return the bot streams
+   */
   @GetMapping
   public List<SymphonyStream> getUserStreams() {
-    return symphonyService.getUserStreams(StreamType.knownValues(), true);
+    return symphonyService.getUserStreams(null, true);
   }
 
 }

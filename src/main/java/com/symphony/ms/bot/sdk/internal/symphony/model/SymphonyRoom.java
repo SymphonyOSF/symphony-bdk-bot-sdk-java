@@ -29,7 +29,7 @@ public class SymphonyRoom {
   private String description;
   private Boolean membersCanInvite;
   private Boolean discoverable;
-  private Boolean isPublic;
+  private Boolean publicRoom;
   private Boolean readOnly;
   private Boolean copyProtected;
   private Boolean crossPod;
@@ -46,7 +46,7 @@ public class SymphonyRoom {
     this.description = roomInfo.getRoomAttributes().getDescription();
     this.membersCanInvite = roomInfo.getRoomAttributes().getMembersCanInvite();
     this.discoverable = roomInfo.getRoomAttributes().getDiscoverable();
-    this.isPublic = roomInfo.getRoomAttributes().getPublic();
+    this.publicRoom = roomInfo.getRoomAttributes().getPublic();
     this.readOnly = roomInfo.getRoomAttributes().getReadOnly();
     this.copyProtected = roomInfo.getRoomAttributes().getCopyProtected();
     this.crossPod = roomInfo.getRoomAttributes().getCrossPod();

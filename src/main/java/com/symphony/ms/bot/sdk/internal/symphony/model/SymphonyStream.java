@@ -27,7 +27,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SymphonyStream {
 
-  private String id;
+  private String streamId;
   private Boolean crossPod;
   private String origin;
   private Boolean active;
@@ -37,7 +37,7 @@ public class SymphonyStream {
   private String roomName;
 
   public SymphonyStream(StreamInfo streamInfo) {
-    this.id = streamInfo.getId();
+    this.streamId = streamInfo.getId();
     this.crossPod = streamInfo.getCrossPod();
     this.origin = streamInfo.getOrigin();
     this.active = streamInfo.getActive();
@@ -48,7 +48,7 @@ public class SymphonyStream {
   }
 
   public SymphonyStream(StreamListItem streamListItem) {
-    this.id = streamListItem.getId();
+    this.streamId = streamListItem.getId();
     this.crossPod = streamListItem.getCrossPod();
     this.active = streamListItem.getActive();
     this.streamType = streamListItem.getStreamType() != null ?

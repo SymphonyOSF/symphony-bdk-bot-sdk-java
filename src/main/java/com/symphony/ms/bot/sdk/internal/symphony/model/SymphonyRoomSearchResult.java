@@ -35,7 +35,10 @@ public class SymphonyRoomSearchResult {
         new SymphonyRoomSearchQuery(roomSearchResult.getQuery(), roomSearchResult.getSkip(),
             roomSearchResult.getLimit());
     this.rooms =
-        roomSearchResult.getRooms().stream().map(SymphonyRoom::new).collect(Collectors.toList());
+        roomSearchResult.getRooms()
+            .stream()
+            .map(SymphonyRoom::new)
+            .collect(Collectors.toList());
   }
 
 }

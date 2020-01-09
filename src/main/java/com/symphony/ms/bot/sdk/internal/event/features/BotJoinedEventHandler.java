@@ -47,7 +47,7 @@ public class BotJoinedEventHandler extends EventHandler<UserJoinedRoomEvent> {
   }
 
   private boolean isPublicRoom(UserJoinedRoomEvent event) {
-    return symphonyService.getRoomInfo(event.getStreamId()).getIsPublic();
+    return symphonyService.getRoomInfo(event.getStreamId()).getPublicRoom();
   }
 
   private void sendPublicRoomNotAllowedMessage(String streamId) {

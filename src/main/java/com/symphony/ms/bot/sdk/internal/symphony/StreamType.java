@@ -1,9 +1,5 @@
 package com.symphony.ms.bot.sdk.internal.symphony;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * Symphony stream types
  *
@@ -23,12 +19,6 @@ public enum StreamType {
       default:
         return UNKNOWN;
     }
-  }
-
-  public static List<StreamType> knownValues() {
-    return Arrays.stream(values())
-        .filter(streamType -> !streamType.equals(UNKNOWN))
-        .collect(Collectors.toList());
   }
 
 }
