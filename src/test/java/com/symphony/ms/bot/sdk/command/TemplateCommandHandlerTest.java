@@ -11,7 +11,7 @@ import com.symphony.ms.bot.sdk.internal.event.model.MessageEvent;
 import com.symphony.ms.bot.sdk.internal.event.model.UserDetails;
 import com.symphony.ms.bot.sdk.internal.lib.jsonmapper.JsonMapperImpl;
 import com.symphony.ms.bot.sdk.internal.message.model.SymphonyMessage;
-import com.symphony.ms.bot.sdk.internal.symphony.SymphonyService;
+import com.symphony.ms.bot.sdk.internal.symphony.UsersClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,9 +31,9 @@ public class TemplateCommandHandlerTest {
   public void setup() {
     templateCommandHandler = new TemplateCommandHandler(new JsonMapperImpl(new ObjectMapper()));
 
-    SymphonyService symphonyService = mock(SymphonyService.class);
-    when(symphonyService.getBotDisplayName()).thenReturn("botDisplayName");
-    templateCommandHandler.setSymphonyService(symphonyService);
+    UsersClient usersClient = mock(UsersClient.class);
+    when(usersClient.getBotDisplayName()).thenReturn("botDisplayName");
+    templateCommandHandler.setUsersClient(usersClient);
   }
 
   @Test
