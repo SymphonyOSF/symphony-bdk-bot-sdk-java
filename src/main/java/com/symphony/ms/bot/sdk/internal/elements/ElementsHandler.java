@@ -65,21 +65,20 @@ public abstract class ElementsHandler implements
    */
   @Override
   public void onCommand(BotCommand command) {
-    LOGGER.debug("Received command to display elements form {}",
-        command.getMessage());
+    LOGGER.debug("Received command to display elements form {}", command.getMessageEvent());
 
     final SymphonyMessage elementsResponse = new SymphonyMessage();
     try {
       displayElements(command, elementsResponse);
 
       if (elementsResponse.hasContent()) {
-        messageService.sendMessage(command.getMessage().getStreamId(), elementsResponse);
+        messageService.sendMessage(command.getMessageEvent().getStreamId(), elementsResponse);
       }
 
     } catch (Exception e) {
       LOGGER.error("Error processing command {}\n{}", getCommandName(), e);
       if (featureManager.unexpectedErrorResponse() != null) {
-        messageService.sendMessage(command.getMessage().getStreamId(),
+        messageService.sendMessage(command.getMessageEvent().getStreamId(),
             new SymphonyMessage(featureManager.unexpectedErrorResponse()));
       }
     }

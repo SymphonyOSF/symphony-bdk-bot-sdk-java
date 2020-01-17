@@ -35,27 +35,21 @@ public class FileCommandHandler extends CommandHandler {
 
   @Override
   public void handle(BotCommand command, SymphonyMessage commandResponse) {
+    List<MessageAttachmentFile> attachments = null;
     try {
-      List<MessageAttachmentFile> attachments =
-          messageClient.getMessageAttachments(command.getMessage().getMessageId(),
-              command.getMessage().getStreamId(), command.getMessage().getAttachments());
-      if (attachments == null || attachments.size() <= 0) {
-        commandResponse.setMessage(
-            "<mention uid=\"" + command.getMessage().getUserId()
-                + "\"/> message has no attachment");
-      } else if (attachments.size() == 1) {
-        commandResponse.setMessage(
-            "<mention uid=\"" + command.getMessage().getUserId()
-                + "\"/> message has 1 attachment:");
-        commandResponse.setAttachments(attachments);
-      } else {
-        commandResponse.setMessage(
-            "<mention uid=\"" + command.getMessage().getUserId() + "\"/> message has "
-                + attachments.size() + " attachments:");
-        commandResponse.setAttachments(attachments);
-      }
+      attachments = messageClient.downloadMessageAttachments(command.getMessageEvent());
     } catch (SymphonyClientException sce) {
       LOGGER.error("SymphonyClientException thrown on FileCommandHandler", sce);
+    }
+    int size = attachments == null ? 0 : attachments.size();
+    if (size <= 0) {
+      commandResponse.setMessage("<mention uid=\"" + command.getMessageEvent().getUserId()
+          + "\"/> message has no attachment");
+    } else {
+      commandResponse.setMessage(
+          "<mention uid=\"" + command.getMessageEvent().getUserId() + "\"/> message has " + size
+              + " attachment(s):");
+      commandResponse.setAttachments(attachments);
     }
   }
 

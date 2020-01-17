@@ -1,7 +1,5 @@
 package com.symphony.ms.bot.sdk.internal.message;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -13,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.symphony.ms.bot.sdk.internal.event.model.MessageAttachmentFile;
-import com.symphony.ms.bot.sdk.internal.feature.FeatureManager;
 import com.symphony.ms.bot.sdk.internal.lib.jsonmapper.JsonMapper;
 import com.symphony.ms.bot.sdk.internal.lib.templating.TemplateService;
 import com.symphony.ms.bot.sdk.internal.message.model.SymphonyMessage;
@@ -22,15 +19,12 @@ import com.symphony.ms.bot.sdk.internal.symphony.exception.SymphonyClientExcepti
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class MessageServiceTest {
@@ -44,9 +38,6 @@ public class MessageServiceTest {
   @Mock
   private JsonMapper jsonMapper;
 
-  @Mock
-  private FeatureManager featureManager;
-
   @InjectMocks
   private MessageServiceImpl messageService;
 
@@ -57,7 +48,7 @@ public class MessageServiceTest {
     when(message.hasTemplate()).thenReturn(false);
     when(message.isEnrichedMessage()).thenReturn(false);
     doThrow(new SymphonyClientException(new Exception()))
-        .when(messageClient).sendMessage(any(), any(), any(), any());
+        .when(messageClient).sendMessage(any(), any(), any());
 
     messageService.sendMessage("1234", message);
   }
@@ -71,8 +62,8 @@ public class MessageServiceTest {
 
     messageService.sendMessage("1234", message);
 
-    verify(messageClient, times(1)).sendMessage(
-        eq("1234"), eq("some message"), eq(null), any());
+    verify(messageClient, times(1))
+        .sendMessage(eq("1234"), eq("some message"), eq(null));
   }
 
   @Test
@@ -90,8 +81,7 @@ public class MessageServiceTest {
     verify(messageClient, times(1)).sendMessage(
         eq("1234"),
         eq("<div class='entity' data-entity-id='entity.name'>some message</div>"),
-        eq("payload data"),
-        any());
+        eq("payload data"));
   }
 
   @Test
@@ -106,7 +96,7 @@ public class MessageServiceTest {
     messageService.sendMessage("1234", message);
 
     verify(messageClient, times(1)).sendMessage(
-        eq("1234"), eq("some template message"), eq(null), any());
+        eq("1234"), eq("some template message"), eq(null));
   }
 
   @Test
@@ -126,8 +116,7 @@ public class MessageServiceTest {
     verify(messageClient, times(1)).sendMessage(
         eq("1234"),
         eq("<div class='entity' data-entity-id='entity.name'>some template message</div>"),
-        eq("payload data"),
-        any());
+        eq("payload data"));
   }
 
   @Test
@@ -142,7 +131,7 @@ public class MessageServiceTest {
     messageService.sendMessage("1234", message);
 
     verify(messageClient, times(1)).sendMessage(
-        eq("1234"), eq("some template file"), eq(null), any());
+        eq("1234"), eq("some template file"), eq(null));
   }
 
   @Test
@@ -162,44 +151,18 @@ public class MessageServiceTest {
     verify(messageClient, times(1)).sendMessage(
         eq("1234"),
         eq("<div class='entity' data-entity-id='entity.name'>some template file</div>"),
-        eq("payload data"),
-        any());
+        eq("payload data"));
   }
 
   @Test
   public void shouldStoreAndDeleteAttachments() throws SymphonyClientException {
-    when(featureManager.getStorePath()).thenReturn("/tmp/symphony/test");
     SymphonyMessage message = new SymphonyMessage();
-    MessageAttachmentFile attachmentFile = mock(MessageAttachmentFile.class);
-    when(attachmentFile.getFileContent()).thenReturn("content".getBytes());
-    when(attachmentFile.getFileName()).thenReturn(getAttachmentName());
-    message.setAttachments(Collections.singletonList(attachmentFile));
+    message.setAttachments(Collections.singletonList(mock(MessageAttachmentFile.class)));
     message.setMessage("message");
 
     messageService.sendMessage("streamId", message);
 
-    ArgumentCaptor<File[]> argumentCaptor = ArgumentCaptor.forClass(File[].class);
-    verify(messageClient, times(1)).sendMessage(
-        anyString(), anyString(), any(), argumentCaptor.capture());
-    File[] value = argumentCaptor.getValue();
-    assertEquals(1, value.length);
-    assertTrue(new File("/tmp/symphony/test").exists());
-    tearDown();
-  }
-
-  private String getAttachmentName() {
-    return "attachment_test " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        .format(LocalDateTime.now()) + ".txt";
-  }
-
-  public void tearDown() {
-    File testDir = new File("/tmp/symphony/test");
-    if (testDir.exists()) {
-      for (File file : testDir.listFiles()) {
-        file.delete();
-      }
-      testDir.delete();
-    }
+    verify(messageClient, times(1)).sendMessage(anyString(), anyString(), any(), any(List.class));
   }
 
 }

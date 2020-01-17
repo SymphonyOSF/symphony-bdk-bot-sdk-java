@@ -52,11 +52,11 @@ public class OAuthAuthenticationProvider implements AuthenticationProvider {
   @Override
   public void handleUnauthenticated(BotCommand command, SymphonyMessage commandResponse) {
     // Cache command to retry it once user gets authenticated
-    commandCache.put(command.getMessage().getUserId(), command);
+    commandCache.put(command.getMessageEvent().getUserId(), command);
 
-    commandResponse.setMessage("Hi <b>" + command.getMessage().getUser().getDisplayName()
+    commandResponse.setMessage("Hi <b>" + command.getUser().getDisplayName()
         + "</b>.  You still don't have linked your account.<br/><br/>"
-        + getLinkAccountUrl(command.getMessage().getUserId()));
+        + getLinkAccountUrl(command.getMessageEvent().getUserId()));
   }
 
   public void authorizeCode(String code, String userId) {

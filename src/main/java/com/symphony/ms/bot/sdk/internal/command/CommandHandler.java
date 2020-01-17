@@ -60,20 +60,20 @@ public abstract class CommandHandler implements BaseCommandHandler {
    */
   @Override
   public void onCommand(BotCommand command) {
-    LOGGER.debug("Received command {}", command.getMessage());
+    LOGGER.debug("Received command {}", command.getMessageEvent());
 
     final SymphonyMessage commandResponse = new SymphonyMessage();
     try {
       handle(command, commandResponse);
       if (commandResponse.hasContent()
           && featureManager.isCommandFeedbackEnabled()) {
-        messageService.sendMessage(command.getMessage().getStreamId(), commandResponse);
+        messageService.sendMessage(command.getMessageEvent().getStreamId(), commandResponse);
       }
 
     } catch (Exception e) {
       LOGGER.error("Error processing command {}\n{}", getCommandName(), e);
       if (featureManager.unexpectedErrorResponse() != null) {
-        messageService.sendMessage(command.getMessage().getStreamId(),
+        messageService.sendMessage(command.getMessageEvent().getStreamId(),
             new SymphonyMessage(featureManager.unexpectedErrorResponse()));
       }
     }

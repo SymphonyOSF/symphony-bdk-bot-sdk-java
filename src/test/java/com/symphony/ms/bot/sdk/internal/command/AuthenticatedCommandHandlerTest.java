@@ -68,7 +68,7 @@ public class AuthenticatedCommandHandlerTest {
     SymphonyMessage response = mock(SymphonyMessage.class);
     MessageEvent message = mock(MessageEvent.class);
     when(message.getUserId()).thenReturn("1234");
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
     when(authenticationProvider.getAuthenticationContext(anyString())).thenReturn(null);
 
     commandHandler.handle(command, response);
@@ -84,7 +84,7 @@ public class AuthenticatedCommandHandlerTest {
     AuthenticationContext context = mock(AuthenticationContext.class);
     MessageEvent message = mock(MessageEvent.class);
     when(message.getUserId()).thenReturn("1234");
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
     when(authenticationProvider.getAuthenticationContext(anyString())).thenReturn(context);
     when(context.isAuthenticated()).thenReturn(false);
 
@@ -102,7 +102,7 @@ public class AuthenticatedCommandHandlerTest {
     AuthenticationContext context = mock(AuthenticationContext.class);
     MessageEvent message = mock(MessageEvent.class);
     when(message.getUserId()).thenReturn("1234");
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
     when(authenticationProvider.getAuthenticationContext(anyString())).thenReturn(context);
     when(context.isAuthenticated()).thenReturn(true);
 

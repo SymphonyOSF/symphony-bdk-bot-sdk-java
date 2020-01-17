@@ -31,7 +31,7 @@ public abstract class AuthenticatedCommandHandler extends CommandHandler {
   @Override
   public void handle(BotCommand command, SymphonyMessage commandResponse) {
     AuthenticationContext authContext = authenticationProvider
-        .getAuthenticationContext(command.getMessage().getUserId());
+        .getAuthenticationContext(command.getMessageEvent().getUserId());
 
     if (authContext != null && authContext.isAuthenticated()) {
       LOGGER.debug("User authenticated");

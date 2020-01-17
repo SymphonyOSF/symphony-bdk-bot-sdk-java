@@ -131,14 +131,14 @@ public class ElementsHandlerTest {
 
   @Test
   public void onCommandGetCommandMessageTest() {
-    elementsHandler.setInternalDisplayElements((cmd, msg) -> cmd.getMessage());
+    elementsHandler.setInternalDisplayElements((cmd, msg) -> cmd.getMessageEvent());
     BotCommand command = mock(BotCommand.class);
 
     elementsHandler.onCommand(command);
 
-    verify(command, times(2)).getMessage();
+    verify(command, times(2)).getMessageEvent();
     verify(messageService, never())
-      .sendMessage(anyString(), any(SymphonyMessage.class));
+        .sendMessage(anyString(), any(SymphonyMessage.class));
 
   }
 
@@ -163,7 +163,7 @@ public class ElementsHandlerTest {
     BotCommand command = mock(BotCommand.class);
     MessageEvent message = mock(MessageEvent.class);
     when(message.getStreamId()).thenReturn("12345");
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
 
     elementsHandler.onCommand(command);
 
@@ -199,7 +199,7 @@ public class ElementsHandlerTest {
         .thenReturn("some error message");
     MessageEvent message = mock(MessageEvent.class);
     when(message.getStreamId()).thenReturn("STREAM_ID_1234");
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
 
     spyElementsHandler.onCommand(command);
 

@@ -41,7 +41,7 @@ public class QuoteCommandHandler extends CommandHandler {
    */
   @Override
   public void handle(BotCommand command, SymphonyMessage commandResponse) {
-    Optional<String> currency = getCommandCurrency(command.getMessage().getMessage());
+    Optional<String> currency = getCommandCurrency(command.getMessageEvent().getMessage());
     if (currency.isPresent()) {
       RestResponse<QuoteResponse> response = requestQuote(currency.get());
       if (response.getStatus() == 200) {

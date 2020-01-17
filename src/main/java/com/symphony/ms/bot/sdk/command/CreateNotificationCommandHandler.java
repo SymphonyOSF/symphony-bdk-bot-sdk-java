@@ -35,7 +35,7 @@ public class CreateNotificationCommandHandler extends CommandHandler {
   @Override
   public void handle(BotCommand command, SymphonyMessage commandResponse) {
     String notificationUrl = featureManager.getNotificationBaseUrl()
-        + servletContext + NOTIFICATION_PATH + "/" + command.getMessage().getStreamId();
+        + servletContext + NOTIFICATION_PATH + "/" + command.getMessageEvent().getStreamId();
 
     Map<String, String> data = new HashMap<>();
     data.put("notification_url", notificationUrl);

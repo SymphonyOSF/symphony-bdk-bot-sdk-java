@@ -34,11 +34,11 @@ public class FileCommandHandlerTest {
   private FileCommandHandler fileCommandHandler;
 
   @Test
-  public void shouldSetNoAttachment() throws SymphonyClientException {
+  public void shouldSetNoAttachment() {
     MessageEvent messageEvent = new MessageEvent();
     messageEvent.setUserId("userId");
     BotCommand command = mock(BotCommand.class);
-    when(command.getMessage()).thenReturn(messageEvent);
+    when(command.getMessageEvent()).thenReturn(messageEvent);
     SymphonyMessage commandResponse = new SymphonyMessage();
 
     fileCommandHandler.handle(command, commandResponse);
@@ -55,15 +55,15 @@ public class FileCommandHandlerTest {
     message.setUserId("userId");
     message.setAttachments(Collections.singletonList(new MessageAttachment()));
     BotCommand command = mock(BotCommand.class);
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
     SymphonyMessage commandResponse = new SymphonyMessage();
-    when(messageClient.getMessageAttachments(any(), any(), any()))
+    when(messageClient.downloadMessageAttachments(any(MessageEvent.class)))
         .thenReturn(Collections.singletonList(mock(MessageAttachmentFile.class)));
 
     fileCommandHandler.handle(command, commandResponse);
 
     assertNotNull(commandResponse);
-    assertEquals("<mention uid=\"userId\"/> message has 1 attachment:",
+    assertEquals("<mention uid=\"userId\"/> message has 1 attachment(s):",
         commandResponse.getMessage());
     assertNotNull(commandResponse.getAttachments());
     assertEquals(1, commandResponse.getAttachments().size());
@@ -78,17 +78,18 @@ public class FileCommandHandlerTest {
         new MessageAttachment(),
         new MessageAttachment()));
     BotCommand command = mock(BotCommand.class);
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
     SymphonyMessage commandResponse = new SymphonyMessage();
-    when(messageClient.getMessageAttachments(any(), any(), any())).thenReturn(Arrays.asList(
-        mock(MessageAttachmentFile.class),
-        mock(MessageAttachmentFile.class),
-        mock(MessageAttachmentFile.class)));
+    when(messageClient.downloadMessageAttachments(any(MessageEvent.class))).thenReturn(
+        Arrays.asList(
+            mock(MessageAttachmentFile.class),
+            mock(MessageAttachmentFile.class),
+            mock(MessageAttachmentFile.class)));
 
     fileCommandHandler.handle(command, commandResponse);
 
     assertNotNull(commandResponse);
-    assertEquals("<mention uid=\"userId\"/> message has 3 attachments:",
+    assertEquals("<mention uid=\"userId\"/> message has 3 attachment(s):",
         commandResponse.getMessage());
     assertNotNull(commandResponse.getAttachments());
     assertEquals(3, commandResponse.getAttachments().size());

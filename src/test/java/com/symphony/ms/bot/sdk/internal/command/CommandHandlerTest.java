@@ -104,12 +104,12 @@ public class CommandHandlerTest {
 
   @Test
   public void onCommandGetCommandMessageTest() {
-    commandHandler.setInternalHandle((cmd, msg) -> cmd.getMessage());
+    commandHandler.setInternalHandle((cmd, msg) -> cmd.getMessageEvent());
     BotCommand command = mock(BotCommand.class);
 
     commandHandler.onCommand(command);
 
-    verify(command, times(2)).getMessage();
+    verify(command, times(2)).getMessageEvent();
   }
 
   @Test
@@ -147,7 +147,7 @@ public class CommandHandlerTest {
     BotCommand command = mock(BotCommand.class);
     MessageEvent message = mock(MessageEvent.class);
     when(message.getStreamId()).thenReturn("STREAM_ID_1234");
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
     when(featureManager.isCommandFeedbackEnabled()).thenReturn(true);
 
     commandHandler.onCommand(command);
@@ -185,7 +185,7 @@ public class CommandHandlerTest {
         .thenReturn("some error message");
     MessageEvent message = mock(MessageEvent.class);
     when(message.getStreamId()).thenReturn("STREAM_ID_1234");
-    when(command.getMessage()).thenReturn(message);
+    when(command.getMessageEvent()).thenReturn(message);
 
     spyCommandHandler.onCommand(command);
 

@@ -27,7 +27,7 @@ public class HelloCommandHandler extends CommandHandler {
   @Override
   public void handle(BotCommand command, SymphonyMessage response) {
     Map<String, String> variables = new HashMap<>();
-    variables.put("user", command.getMessage().getUser().getDisplayName());
+    variables.put("user", command.getUser().getDisplayName());
 
     response.setTemplateMessage("Hello, <b>{{user}}</b>", variables);
   }
