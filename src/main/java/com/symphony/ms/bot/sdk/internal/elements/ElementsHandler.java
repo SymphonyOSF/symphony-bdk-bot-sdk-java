@@ -1,8 +1,5 @@
 package com.symphony.ms.bot.sdk.internal.elements;
 
-import java.util.function.Predicate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.symphony.ms.bot.sdk.internal.command.BaseCommandHandler;
 import com.symphony.ms.bot.sdk.internal.command.CommandDispatcher;
 import com.symphony.ms.bot.sdk.internal.command.CommandFilter;
@@ -14,6 +11,11 @@ import com.symphony.ms.bot.sdk.internal.feature.FeatureManager;
 import com.symphony.ms.bot.sdk.internal.message.MessageService;
 import com.symphony.ms.bot.sdk.internal.message.model.SymphonyMessage;
 import com.symphony.ms.bot.sdk.internal.symphony.UsersClient;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.function.Predicate;
 
 /**
  * Symphony Elements Handler
@@ -71,13 +73,13 @@ public abstract class ElementsHandler implements
       displayElements(command, elementsResponse);
 
       if (elementsResponse.hasContent()) {
-        messageService.sendMessage(command.getStreamId(), elementsResponse);
+        messageService.sendMessage(command.getMessage().getStreamId(), elementsResponse);
       }
 
     } catch (Exception e) {
       LOGGER.error("Error processing command {}\n{}", getCommandName(), e);
       if (featureManager.unexpectedErrorResponse() != null) {
-        messageService.sendMessage(command.getStreamId(),
+        messageService.sendMessage(command.getMessage().getStreamId(),
             new SymphonyMessage(featureManager.unexpectedErrorResponse()));
       }
     }

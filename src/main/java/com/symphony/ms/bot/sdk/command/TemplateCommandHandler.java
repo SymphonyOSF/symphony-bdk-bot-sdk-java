@@ -49,9 +49,11 @@ public class TemplateCommandHandler extends CommandHandler {
 
   @Override
   public void handle(BotCommand command, SymphonyMessage commandResponse) {
-    Optional<SmsRenderer.SmsTypes> templateType = getTemplateType(command.getMessage());
+    Optional<SmsRenderer.SmsTypes> templateType =
+        getTemplateType(command.getMessage().getMessage());
     if (templateType.isPresent()) {
-      Optional<Map<String, Object>> commandParameter = getCommandParameter(command.getMessage());
+      Optional<Map<String, Object>> commandParameter =
+          getCommandParameter(command.getMessage().getMessage());
       if (commandParameter.isPresent()) {
         renderTemplate(templateType.get(), commandParameter.get(), commandResponse);
       } else {
