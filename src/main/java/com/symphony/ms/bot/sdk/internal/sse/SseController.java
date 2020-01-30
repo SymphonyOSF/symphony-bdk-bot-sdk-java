@@ -76,7 +76,6 @@ public class SseController {
         .lastEventId(lastEventId)
         .build();
 
-    LOGGER.info("FILTER" + filterCriteria.get("name"));
     List<SsePublisher> pubs = ssePublisherRouter.findPublishers(subscriber);
     if (pubs.isEmpty()) {
       LOGGER.info("No SSE publisher found for streams {}",
