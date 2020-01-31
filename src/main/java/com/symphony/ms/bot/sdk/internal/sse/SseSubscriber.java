@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ public class SseSubscriber {
   private String lastEventId;
   private boolean completed;
 
-
   public SseSubscriber(SseEmitter sseEmitter, String userId, Map<String, String> filters,
       List<String> streams, String lastEventId) {
     this.sseEmitter = sseEmitter;
@@ -39,6 +37,7 @@ public class SseSubscriber {
 
     this.sseEmitter.onCompletion(() -> completed = true);
     this.sseEmitter.onError((e) -> completed = true);
+    this.sseEmitter.onTimeout(() -> completed = true);
   }
 
   /**
@@ -51,8 +50,12 @@ public class SseSubscriber {
   public void onEvent(SseEvent sseEvent) throws SsePublishEventException {
     try {
       sseEmitter.send(sseEvent);
-    } catch (IOException | IllegalStateException e) {
-      LOGGER.error("Failed to publish SSE event to user {}", userId);
+    } catch (IllegalStateException ise) {
+      LOGGER.debug("Tried to send SSE event but subscriber is already completed");
+      completed = true;
+      throw new SsePublishEventException();
+    } catch (Exception e) {
+      LOGGER.warn("Error sending SSE event to user {}\n{}", userId, e.getMessage());
       throw new SsePublishEventException();
     }
   }
