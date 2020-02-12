@@ -33,6 +33,7 @@ public class FeatureManager {
   private String publicRoomNotAllowedMessage;
   private String publicRoomNotAllowedTemplate;
   private Map publicRoomNotAllowedTemplateMap;
+  private Long spreadsheetPresenceTimeInterval;
 
   /**
    * Whether bot is allowed to send a response in Symphony chat upon completing handling a command
