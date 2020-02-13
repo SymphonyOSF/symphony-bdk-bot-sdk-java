@@ -30,11 +30,12 @@ public class SpreadsheetPublisher extends SsePublisher {
   private static final Logger LOGGER = LoggerFactory.getLogger(SpreadsheetPublisher.class);
   private static final String SPREADSHEET_PRESENCE_EVENT = "spreadsheetPresenceEvent";
   private static final long WAIT_INTERVAL = 1000L;
+  private static final long PRESENCE_TIME_INTERVAL = 10000L;
 
   private final UsersClient usersClient;
   private final FeatureManager featureManager;
   private final AtomicLong eventId;
-  private final Map<SubscriptionEvent, SpreadsheetPresenceEmitter> presenceEmitters;
+  private final Map<String, SpreadsheetPresenceEmitter> presenceEmitters;
 
   public SpreadsheetPublisher(UsersClient usersClient, FeatureManager featureManager) {
     this.usersClient = usersClient;
@@ -64,15 +65,15 @@ public class SpreadsheetPublisher extends SsePublisher {
   protected void onSubscriberAdded(SubscriptionEvent subscriberAddedEvent) {
     SpreadsheetPresenceEmitter presenceEmitter =
         buildPresenceEmitter(subscriberAddedEvent, eventId);
-    presenceEmitters.put(subscriberAddedEvent, presenceEmitter);
+    presenceEmitters.put(subscriberAddedEvent.getMetadata().get("subscriberUuid"), presenceEmitter);
     presenceEmitter.start();
   }
 
   @Override
   protected void onSubscriberRemoved(SubscriptionEvent subscriberRemovedEvent) {
-    SpreadsheetPresenceEmitter presenceEmitter = presenceEmitters.get(subscriberRemovedEvent);
-    presenceEmitter.finish();
-    presenceEmitters.remove(subscriberRemovedEvent);
+    String subscriberUuid = subscriberRemovedEvent.getMetadata().get("subscriberUuid");
+    presenceEmitters.get(subscriberUuid).finish();
+    presenceEmitters.remove(subscriberUuid);
   }
 
   public Long getIdAndIncrement() {
@@ -84,8 +85,7 @@ public class SpreadsheetPublisher extends SsePublisher {
     SymphonyUser user = getUserById(subscriberAddedEvent.getUserId());
     SseEvent presenceEvent =
         buildPresenceEvent(subscriberAddedEvent.getMetadata().get("streamId"), user);
-    return new SpreadsheetPresenceEmitter(
-        featureManager.getSpreadsheetPresenceTimeInterval(), presenceEvent, eventId, this);
+    return new SpreadsheetPresenceEmitter(PRESENCE_TIME_INTERVAL, presenceEvent, eventId, this);
   }
 
   private SseEvent buildPresenceEvent(String streamId, SymphonyUser user) {
