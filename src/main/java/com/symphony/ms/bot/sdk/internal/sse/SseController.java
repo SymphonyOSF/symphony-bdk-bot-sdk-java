@@ -23,7 +23,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -84,7 +83,6 @@ public class SseController {
     }
 
     SseEmitter emitter = new SseEmitter();
-    metadata.put("subscriberUuid", UUID.randomUUID().toString());
     SseSubscriber subscriber = new SseSubscriber(emitter, eventTypes,
         metadata, lastEventId, new Long(userId), queueCapacity);
 
