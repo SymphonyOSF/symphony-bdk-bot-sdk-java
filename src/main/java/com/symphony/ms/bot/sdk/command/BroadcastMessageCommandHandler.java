@@ -52,8 +52,7 @@ public class BroadcastMessageCommandHandler extends MultiResponseCommandHandler 
 
   @Override
   public void handle(BotCommand command, MultiResponseComposer multiResponseComposer)
-      throws SymphonyClientException, MultiResponseComposer.UncompletedCommandResponseComposer {
-
+      throws SymphonyClientException {
     String commandStreamId = command.getMessageEvent().getStreamId();
 
     List<SymphonyStream> botStreams = getBotActiveRooms();
@@ -63,13 +62,11 @@ public class BroadcastMessageCommandHandler extends MultiResponseCommandHandler 
     Set<String> broadcastStreamIds =
         broadcastStreams.stream().map(SymphonyStream::getStreamId).collect(Collectors.toSet());
 
-    multiResponseComposer
-        .templateFile("list", parameterForListTemplate(broadcastStreams))
-        .streamIds(Collections.singleton(commandStreamId))
-        .templateFile("simple",
-            parameterForSimpleTemplate(command))
-        .streamIds(broadcastStreamIds)
-        .compose();
+    multiResponseComposer.compose()
+        .withTemplateFile("list", parameterForListTemplate(broadcastStreams))
+        .toStreams(commandStreamId)
+        .withTemplateFile("simple", parameterForSimpleTemplate(command))
+        .toStreams(broadcastStreamIds);
   }
 
   public String getCommandMessage(BotCommand command) {

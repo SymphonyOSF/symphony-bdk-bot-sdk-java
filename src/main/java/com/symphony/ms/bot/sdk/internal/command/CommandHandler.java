@@ -27,7 +27,7 @@ public abstract class CommandHandler implements BaseCommandHandler {
 
   protected CommandFilter commandFilter;
 
-  private MessageClientImpl messageClient;
+  protected MessageClientImpl messageClient;
 
   protected FeatureManager featureManager;
 

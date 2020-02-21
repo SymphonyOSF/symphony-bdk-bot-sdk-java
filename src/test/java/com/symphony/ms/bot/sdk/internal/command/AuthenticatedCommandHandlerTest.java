@@ -1,6 +1,6 @@
 package com.symphony.ms.bot.sdk.internal.command;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -69,7 +69,7 @@ public class AuthenticatedCommandHandlerTest {
     MessageEvent message = mock(MessageEvent.class);
     when(message.getUserId()).thenReturn(1234L);
     when(command.getMessageEvent()).thenReturn(message);
-    when(authenticationProvider.getAuthenticationContext(anyString())).thenReturn(null);
+    when(authenticationProvider.getAuthenticationContext(anyLong())).thenReturn(null);
 
     commandHandler.handle(command, response);
 
@@ -85,7 +85,7 @@ public class AuthenticatedCommandHandlerTest {
     MessageEvent message = mock(MessageEvent.class);
     when(message.getUserId()).thenReturn(1234L);
     when(command.getMessageEvent()).thenReturn(message);
-    when(authenticationProvider.getAuthenticationContext(anyString())).thenReturn(context);
+    when(authenticationProvider.getAuthenticationContext(anyLong())).thenReturn(context);
     when(context.isAuthenticated()).thenReturn(false);
 
     commandHandler.handle(command, response);
@@ -103,7 +103,7 @@ public class AuthenticatedCommandHandlerTest {
     MessageEvent message = mock(MessageEvent.class);
     when(message.getUserId()).thenReturn(1234L);
     when(command.getMessageEvent()).thenReturn(message);
-    when(authenticationProvider.getAuthenticationContext(anyString())).thenReturn(context);
+    when(authenticationProvider.getAuthenticationContext(anyLong())).thenReturn(context);
     when(context.isAuthenticated()).thenReturn(true);
 
     AuthenticatedCommandHandler spyCommandHandler = spy(commandHandler);

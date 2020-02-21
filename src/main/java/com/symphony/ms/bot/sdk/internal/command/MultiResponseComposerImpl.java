@@ -2,109 +2,92 @@ package com.symphony.ms.bot.sdk.internal.command;
 
 import com.symphony.ms.bot.sdk.internal.symphony.model.SymphonyMessage;
 
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link MultiResponseComposer}
  *
  * @author Gabriel Berberian
  */
-@NoArgsConstructor
-public class MultiResponseComposerImpl extends MultiResponseComposer {
+public class MultiResponseComposerImpl
+    implements MultiResponseComposer, ComposerMessageDefinition, ComposerStreamsDefinition {
 
+  @Getter private Map<SymphonyMessage, Set<String>> composedResponse;
   private SymphonyMessage message;
-  private MultiResponseStreamsComposer streamsComposer;
-  private Map<SymphonyMessage, Set<String>> composedCommandResponse;
 
-  protected MultiResponseComposerImpl(MultiResponseStreamsComposer streamsComposer) {
-    this.streamsComposer = streamsComposer;
+  @Override
+  public ComposerMessageDefinition compose() {
+    composedResponse = new HashMap<>();
+    return this;
   }
 
   @Override
-  public MultiResponseStreamsComposer message(String message) {
+  public ComposerStreamsDefinition withMessage(String message) {
     this.message = new SymphonyMessage(message);
-    return new MultiResponseStreamComposerImpl(this);
+    return this;
   }
 
   @Override
-  public MultiResponseStreamsComposer enrichedMessage(String message, String entityName,
+  public ComposerStreamsDefinition withEnrichedMessage(String message, String entityName,
       Object entity, String version) {
     this.message = new SymphonyMessage();
     this.message.setEnrichedMessage(message, entityName, entity, version);
-    return new MultiResponseStreamComposerImpl(this);
+    return this;
   }
 
   @Override
-  public MultiResponseStreamsComposer templateMessage(String templateMessage,
+  public ComposerStreamsDefinition withTemplateMessage(String templateMessage,
       Object templateData) {
     this.message = new SymphonyMessage();
     this.message.setTemplateMessage(templateMessage, templateData);
-    return new MultiResponseStreamComposerImpl(this);
+    return this;
   }
 
   @Override
-  public MultiResponseStreamsComposer enrichedTemplateMessage(String templateMessage,
+  public ComposerStreamsDefinition withEnrichedTemplateMessage(String templateMessage,
       Object templateData, String entityName, Object entity, String version) {
     this.message = new SymphonyMessage();
     this.message.setEnrichedTemplateMessage(
         templateMessage, templateData, entityName, entity, version);
-    return new MultiResponseStreamComposerImpl(this);
+    return this;
   }
 
   @Override
-  public MultiResponseStreamsComposer templateFile(String templateFile, Object templateData) {
+  public ComposerStreamsDefinition withTemplateFile(String templateFile, Object templateData) {
     this.message = new SymphonyMessage();
     this.message.setTemplateFile(templateFile, templateData);
-    return new MultiResponseStreamComposerImpl(this);
+    return this;
   }
 
   @Override
-  public MultiResponseStreamsComposer enrichedTemplateFile(String templateFile,
+  public ComposerStreamsDefinition withEnrichedTemplateFile(String templateFile,
       Object templateData, String entityName, Object entity, String version) {
     this.message = new SymphonyMessage();
     this.message.setEnrichedTemplateFile(templateFile, templateData, entityName, entity, version);
-    return new MultiResponseStreamComposerImpl(this);
+    return this;
   }
 
   @Override
-  public void compose() throws UncompletedCommandResponseComposer {
-    if (streamsComposer == null) {
-      throw new UncompletedCommandResponseComposer("Cannot compose");
-    }
-    composedCommandResponse = streamsComposer.complete();
+  public ComposerMessageDefinition toStreams(String... streamIds) {
+    composedResponse.put(message, Arrays.stream(streamIds).collect(Collectors.toSet()));
+    return this;
   }
 
   @Override
+  public ComposerMessageDefinition toStreams(Collection<String> streamIds) {
+    composedResponse.put(message, new HashSet<>(streamIds));
+    return this;
+  }
+
   protected boolean hasContent() {
-    return composedCommandResponse != null;
+    return composedResponse != null && !composedResponse.isEmpty();
   }
-
-  @Override
-  protected Map<SymphonyMessage, Set<String>> complete() {
-    if (streamsComposer == null) {
-      this.composedCommandResponse = new HashMap<>();
-      return composedCommandResponse;
-    } else {
-      return streamsComposer.complete();
-    }
-  }
-
-  @Override
-  protected Map<SymphonyMessage, Set<String>> getComposedCommandResponse()
-      throws UncompletedCommandResponseComposer {
-    if (composedCommandResponse == null) {
-      throw new UncompletedCommandResponseComposer("Cannot get command response");
-    }
-    return composedCommandResponse;
-  }
-
-  @Override
-  protected SymphonyMessage getMessage() {
-    return this.message;
-  }
-
 }
