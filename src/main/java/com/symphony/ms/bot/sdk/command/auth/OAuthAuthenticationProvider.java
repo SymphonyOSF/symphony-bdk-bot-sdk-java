@@ -7,6 +7,7 @@ import com.symphony.ms.bot.sdk.internal.lib.restclient.RestClient;
 import com.symphony.ms.bot.sdk.internal.lib.restclient.RestClientConnectionException;
 import com.symphony.ms.bot.sdk.internal.lib.restclient.model.RestResponse;
 import com.symphony.ms.bot.sdk.internal.symphony.model.SymphonyMessage;
+
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -51,11 +52,11 @@ public class OAuthAuthenticationProvider implements AuthenticationProvider {
   @Override
   public void handleUnauthenticated(BotCommand command, SymphonyMessage commandResponse) {
     // Cache command to retry it once user gets authenticated
-    commandCache.put(command.getMessageEvent().getUserId(), command);
+    commandCache.put(command.getMessageEvent().getUserId().toString(), command);
 
     commandResponse.setMessage("Hi <b>" + command.getUser().getDisplayName()
         + "</b>.  You still don't have linked your account.<br/><br/>"
-        + getLinkAccountUrl(command.getMessageEvent().getUserId()));
+        + getLinkAccountUrl(command.getMessageEvent().getUserId().toString()));
   }
 
   public void authorizeCode(String code, String userId) {
