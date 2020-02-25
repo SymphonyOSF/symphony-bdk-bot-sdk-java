@@ -51,8 +51,7 @@ public class BroadcastMessageCommandHandler extends MultiResponseCommandHandler 
   }
 
   @Override
-  public void handle(BotCommand command, MultiResponseComposer multiResponseComposer)
-      throws SymphonyClientException {
+  public void handle(BotCommand command, MultiResponseComposer multiResponseComposer) {
     String commandStreamId = command.getMessageEvent().getStreamId();
 
     List<SymphonyStream> botStreams = getBotActiveRooms();
@@ -66,7 +65,8 @@ public class BroadcastMessageCommandHandler extends MultiResponseCommandHandler 
         .withTemplateFile("list", parameterForListTemplate(broadcastStreams))
         .toStreams(commandStreamId)
         .withTemplateFile("simple", parameterForSimpleTemplate(command))
-        .toStreams(broadcastStreamIds);
+        .toStreams(broadcastStreamIds)
+        .complete();
   }
 
   public String getCommandMessage(BotCommand command) {
@@ -81,8 +81,13 @@ public class BroadcastMessageCommandHandler extends MultiResponseCommandHandler 
     return commandMessage;
   }
 
-  private List<SymphonyStream> getBotActiveRooms() throws SymphonyClientException {
-    return streamsClient.getUserStreams(Collections.singletonList(ROOM), false);
+  private List<SymphonyStream> getBotActiveRooms() {
+    try {
+      return streamsClient.getUserStreams(Collections.singletonList(ROOM), false);
+    } catch (SymphonyClientException e) {
+      LOGGER.error("Exception thrown getting bot active rooms through streams client. {}", e);
+      return new ArrayList<>();
+    }
   }
 
   private Map<String, Map> parameterForListTemplate(List<SymphonyStream> broadcastStreams) {

@@ -72,4 +72,9 @@ public interface ComposerMessageDefinition {
   ComposerStreamsDefinition withEnrichedTemplateFile(
       String templateFile, Object templateData, String entityName, Object entity, String version);
 
+  /**
+   * Completes response composition
+   */
+  void complete();
+
 }

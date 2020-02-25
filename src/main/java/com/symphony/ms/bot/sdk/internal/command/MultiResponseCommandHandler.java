@@ -23,7 +23,10 @@ public abstract class MultiResponseCommandHandler extends CommandHandler {
     try {
       MultiResponseComposerImpl multiResponseComposer = new MultiResponseComposerImpl();
       handle(command, multiResponseComposer);
-      if (multiResponseComposer.hasContent()) {
+      if (!multiResponseComposer.isComplete()) {
+        LOGGER.error("Error processing command {}\nIncomplete multi response composer",
+            getCommandName());
+      } else if (multiResponseComposer.hasContent() && featureManager.isCommandFeedbackEnabled()) {
         sendContent(multiResponseComposer.getComposedResponse());
       }
     } catch (Exception e) {
@@ -54,7 +57,6 @@ public abstract class MultiResponseCommandHandler extends CommandHandler {
    * @param multiResponseComposer the response composer in which the developer will define the
    *                              messages to be sent to Symphony
    */
-  public abstract void handle(BotCommand command, MultiResponseComposer multiResponseComposer)
-      throws Exception;
+  public abstract void handle(BotCommand command, MultiResponseComposer multiResponseComposer);
 
 }

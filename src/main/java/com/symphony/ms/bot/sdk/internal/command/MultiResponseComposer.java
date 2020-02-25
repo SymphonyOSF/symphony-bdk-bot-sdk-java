@@ -13,4 +13,11 @@ public interface MultiResponseComposer {
    * @return
    */
   ComposerMessageDefinition compose();
+
+  /**
+   * Expose composer complete status
+   *
+   * @return
+   */
+  boolean isComplete();
 }

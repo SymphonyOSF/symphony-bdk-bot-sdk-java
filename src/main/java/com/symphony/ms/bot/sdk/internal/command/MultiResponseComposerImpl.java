@@ -20,12 +20,19 @@ import java.util.stream.Collectors;
 public class MultiResponseComposerImpl
     implements MultiResponseComposer, ComposerMessageDefinition, ComposerStreamsDefinition {
 
+  @Getter private boolean complete;
+
   @Getter private Map<SymphonyMessage, Set<String>> composedResponse;
   private SymphonyMessage message;
 
+  public MultiResponseComposerImpl() {
+    this.complete = true;
+  }
+
   @Override
   public ComposerMessageDefinition compose() {
-    composedResponse = new HashMap<>();
+    this.composedResponse = new HashMap<>();
+    this.complete = false;
     return this;
   }
 
@@ -79,6 +86,11 @@ public class MultiResponseComposerImpl
   public ComposerMessageDefinition toStreams(String... streamIds) {
     composedResponse.put(message, Arrays.stream(streamIds).collect(Collectors.toSet()));
     return this;
+  }
+
+  @Override
+  public void complete() {
+    this.complete = true;
   }
 
   @Override
